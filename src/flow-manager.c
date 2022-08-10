@@ -773,17 +773,19 @@ static void GetWorkUnitSizing(const uint32_t pass_in_sec, const uint32_t rows, c
     uint32_t work_unit_ms = 999 * perc;
     work_unit_ms = MAX(work_unit_ms, 250);
 
-    const uint32_t wus_per_full_pass = full_pass_in_ms / work_unit_ms;
+    //const uint32_t wus_per_full_pass = full_pass_in_ms / work_unit_ms;
 
-    const uint32_t rows_per_wu = MAX(1, rows / wus_per_full_pass);
+    const uint32_t rows_per_wu = MAX(1, rows / pass_in_sec);
+    //const uint32_t rows_per_wu = MAX(1, rows / wus_per_full_pass);
     const uint32_t rows_process_cost = rows_per_wu / 1000; // est 1usec per row
 
-    int32_t sleep_per_wu = work_unit_ms - rows_process_cost;
-    sleep_per_wu = MAX(sleep_per_wu, 10);
+    //int32_t sleep_per_wu = work_unit_ms - rows_process_cost;
+    //sleep_per_wu = MAX(sleep_per_wu, 10);
 
     const float passes_sec = 1000.0 / (float)full_pass_in_ms;
 
-    *wu_sleep = sleep_per_wu;
+    *wu_sleep = work_unit_ms;
+    // *wu_sleep = sleep_per_wu;
     *wu_rows = rows_per_wu;
     *rows_sec = (uint32_t)((float)rows * passes_sec);
 }
