@@ -502,7 +502,30 @@ static uint32_t FlowTimeoutHashInChunks(FlowManagerTimeoutThread *td, struct tim
     uint32_t end = 0;
     uint32_t cnt = 0;
     uint32_t rows_left = rows;
+    //uint32_t rows_left = rows / (hash_max - hash_min);
 
+/*
+for (0 ; chunks ; ++) // chunks was MIN(secs_passed, pass_in_sec)...but then pass_in_sec was use anyway?
+
+  //flowtimeouthash(this)
+
+  rows = hash_max - hash_min;
+  chunk_size = rows / chunks; // previously pass_in_sec
+  min = iter * chunk_size + hash_min; // pos * chunk_size + hash_min;
+  max = min + chunk_size;
+
+  if iter + 1 == chunks; // pos + 1 == pass_secs
+    max = hash_max;
+
+  cnt = flowtimeout
+  ret cnt
+
+
+  hash_pass_iter++; // pos
+  if == 0
+    hash_pass_iter = 0;
+  hash_full_passes++;
+*/
 again:
     start = hash_min + (*pos);
     if (start >= hash_max) {
@@ -770,21 +793,23 @@ static void GetWorkUnitSizing(const uint32_t pass_in_sec, const uint32_t rows, c
     full_pass_in_ms *= perc;
     full_pass_in_ms = MAX(full_pass_in_ms, 333);
 
-    uint32_t work_unit_ms = 999 * perc;
+    uint32_t work_unit_ms = 667 * perc;
     work_unit_ms = MAX(work_unit_ms, 250);
 
-    const uint32_t wus_per_full_pass = full_pass_in_ms / work_unit_ms;
+    //const uint32_t wus_per_full_pass = full_pass_in_ms / work_unit_ms;
 
-    const uint32_t rows_per_wu = MAX(1, rows / wus_per_full_pass);
-    const uint32_t rows_process_cost = rows_per_wu / 1000; // est 1usec per row
+    //const uint32_t rows_per_wu = MAX(1, rows / wus_per_full_pass);
+    //const uint32_t rows_process_cost = rows_per_wu / 1000; // est 1usec per row
 
-    int32_t sleep_per_wu = work_unit_ms - rows_process_cost;
-    sleep_per_wu = MAX(sleep_per_wu, 10);
+    //int32_t sleep_per_wu = work_unit_ms - rows_process_cost;
+    //sleep_per_wu = MAX(sleep_per_wu, 10);
 
     const float passes_sec = 1000.0 / (float)full_pass_in_ms;
 
-    *wu_sleep = sleep_per_wu;
-    *wu_rows = rows_per_wu;
+    *wu_sleep = work_unit_ms;
+    *wu_rows = rows;
+    //*wu_rows = rows_per_wu;
+    //*wu_rows = rows_per_wu;
     *rows_sec = (uint32_t)((float)rows * passes_sec);
 }
 
