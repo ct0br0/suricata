@@ -755,8 +755,10 @@ static void GetWorkUnitSizing(const uint32_t rows, const uint32_t mp, const bool
     SCLogDebug("mp %u emp %u rows %u rows_sec %u sleep %ums", mp, emp, rows, rows_per_sec,
             sleep_per_unit);
 
-    *wu_sleep = sleep_per_unit;
-    *wu_rows = rows_per_sec;
+    //*wu_sleep = sleep_per_unit;
+    //*wu_rows = rows_per_sec;
+    *wu_sleep = 667;
+    *wu_rows = rows;
     *rows_sec = rows_per_sec;
 }
 
