@@ -1362,6 +1362,18 @@ int AppLayerParserParse(ThreadVars *tv, AppLayerParserThreadCtx *alp_tctx, Flow 
                 alp_tctx->alproto_local_storage[f->protomap][alproto]);
         if (res.status < 0) {
             AppLayerIncParserErrorCounter(tv, f);
+            //if (f->alproto == ALPROTO_DNS && f->proto == IPPROTO_TCP) {
+            if (f->alproto == ALPROTO_HTTP1 || f->alproto == ALPROTO_HTTP2 || f->alproto == ALPROTO_HTTP) {
+              printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+                    (uint8_t)f->src.addr_data8[0],
+                    (uint8_t)f->src.addr_data8[1],
+                    (uint8_t)f->src.addr_data8[2],
+                    (uint8_t)f->src.addr_data8[3], f->sp,
+                    (uint8_t)f->dst.addr_data8[0],
+                    (uint8_t)f->dst.addr_data8[1],
+                    (uint8_t)f->dst.addr_data8[2],
+                    (uint8_t)f->dst.addr_data8[3], f->dp);
+            }
             goto error;
         } else if (res.status > 0) {
             DEBUG_VALIDATE_BUG_ON(res.consumed > input_len);
