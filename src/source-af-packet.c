@@ -471,7 +471,7 @@ TmEcode AFPPeersListInit(void)
 TmEcode AFPPeersListCheck(void)
 {
 #define AFP_PEERS_MAX_TRY 4
-#define AFP_PEERS_WAIT 20000
+#define AFP_PEERS_WAIT 200000
     int try = 0;
     SCEnter();
     while (try < AFP_PEERS_MAX_TRY) {
