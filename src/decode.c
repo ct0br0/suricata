@@ -237,6 +237,16 @@ void PacketDecodeFinalize(ThreadVars *tv, DecodeThreadVars *dtv, Packet *p)
 {
     if (p->flags & PKT_IS_INVALID) {
         StatsIncr(tv, dtv->counter_invalid);
+        printf("omgerrr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+          (uint8_t)p->src.addr_data8[0],
+          (uint8_t)p->src.addr_data8[1],
+          (uint8_t)p->src.addr_data8[2],
+          (uint8_t)p->src.addr_data8[3], p->sp,
+          (uint8_t)p->dst.addr_data8[0],
+          (uint8_t)p->dst.addr_data8[1],
+          (uint8_t)p->dst.addr_data8[2],
+          (uint8_t)p->dst.addr_data8[3], p->dp
+        );
     }
 }
 
