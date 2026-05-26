@@ -1667,6 +1667,17 @@ int AppLayerParserParse(ThreadVars *tv, AppLayerParserThreadCtx *alp_tctx, Flow 
             }
 
             if (f->proto == IPPROTO_TCP && f->protoctx != NULL) {
+              if (f->alproto == ALPROTO_SIP) {
+                  printf("omegerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+                        (uint8_t)f->src.addr_data8[0],
+                        (uint8_t)f->src.addr_data8[1],
+                        (uint8_t)f->src.addr_data8[2],
+                        (uint8_t)f->src.addr_data8[3], f->sp,
+                        (uint8_t)f->dst.addr_data8[0],
+                        (uint8_t)f->dst.addr_data8[1],
+                        (uint8_t)f->dst.addr_data8[2],
+                        (uint8_t)f->dst.addr_data8[3], f->dp);
+                }
                 TcpSession *ssn = f->protoctx;
                 SCLogDebug("direction %d/%s", direction,
                         (flags & STREAM_TOSERVER) ? "toserver" : "toclient");
