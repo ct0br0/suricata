@@ -734,6 +734,19 @@ int AppLayerHandleTCPData(ThreadVars *tv, TcpReassemblyThreadCtx *ra_ctx, Packet
         alproto = f->alproto_tc;
     }
 
+    if (f->alproto == ALPROTO_SIP) {
+    printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+          (uint8_t)f->src.addr_data8[0],
+          (uint8_t)f->src.addr_data8[1],
+          (uint8_t)f->src.addr_data8[2],
+          (uint8_t)f->src.addr_data8[3], f->sp,
+          (uint8_t)f->dst.addr_data8[0],
+          (uint8_t)f->dst.addr_data8[1],
+          (uint8_t)f->dst.addr_data8[2],
+          (uint8_t)f->dst.addr_data8[3], f->dp);
+    }
+
+
     /* If a gap notification, relay the notification on to the
      * app-layer if known. */
     if (flags & STREAM_GAP) {
@@ -895,6 +908,18 @@ int AppLayerHandleUdp(ThreadVars *tv, AppLayerThreadCtx *tctx, Packet *p, Flow *
     }
 
     AppLayerProfilingReset(tctx);
+
+    if (f->alproto == ALPROTO_SIP) {
+    printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+          (uint8_t)f->src.addr_data8[0],
+          (uint8_t)f->src.addr_data8[1],
+          (uint8_t)f->src.addr_data8[2],
+          (uint8_t)f->src.addr_data8[3], f->sp,
+          (uint8_t)f->dst.addr_data8[0],
+          (uint8_t)f->dst.addr_data8[1],
+          (uint8_t)f->dst.addr_data8[2],
+          (uint8_t)f->dst.addr_data8[3], f->dp);
+    }
 
     /* if the protocol is still unknown, run detection */
     if (*alproto == ALPROTO_UNKNOWN) {
