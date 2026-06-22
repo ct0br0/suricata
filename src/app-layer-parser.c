@@ -1650,6 +1650,17 @@ int AppLayerParserParse(ThreadVars *tv, AppLayerParserThreadCtx *alp_tctx, Flow 
         AppLayerResult res = p->Parser[direction](f, alstate, pstate, stream_slice,
                 alp_tctx->alproto_local_storage[alproto][f->protomap]);
         if (res.status < 0) {
+              if (f->alproto == ALPROTO_HTTP || f->alproto == ALPROTO_HTTP1 || f->alproto == ALPROTO_HTTP2) {
+                  printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
+                        (uint8_t)f->src.addr_data8[0],
+                        (uint8_t)f->src.addr_data8[1],
+                        (uint8_t)f->src.addr_data8[2],
+                        (uint8_t)f->src.addr_data8[3], f->sp,
+                        (uint8_t)f->dst.addr_data8[0],
+                        (uint8_t)f->dst.addr_data8[1],
+                        (uint8_t)f->dst.addr_data8[2],
+                        (uint8_t)f->dst.addr_data8[3], f->dp);
+                }
             AppLayerIncParserErrorCounter(tv, f);
             goto error;
         } else if (res.status > 0) {
@@ -1666,17 +1677,6 @@ int AppLayerParserParse(ThreadVars *tv, AppLayerParserThreadCtx *alp_tctx, Flow 
                 goto error;
             }
 
-              if (f->alproto == ALPROTO_SIP) {
-                  printf("omegerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
-                        (uint8_t)f->src.addr_data8[0],
-                        (uint8_t)f->src.addr_data8[1],
-                        (uint8_t)f->src.addr_data8[2],
-                        (uint8_t)f->src.addr_data8[3], f->sp,
-                        (uint8_t)f->dst.addr_data8[0],
-                        (uint8_t)f->dst.addr_data8[1],
-                        (uint8_t)f->dst.addr_data8[2],
-                        (uint8_t)f->dst.addr_data8[3], f->dp);
-                }
             if (f->proto == IPPROTO_TCP && f->protoctx != NULL) {
                 TcpSession *ssn = f->protoctx;
                 SCLogDebug("direction %d/%s", direction,
