@@ -196,7 +196,7 @@ void AppLayerIncInternalErrorCounter(ThreadVars *tv, Flow *f)
 
 static void AppLayerIncrErrorExcPolicyCounter(ThreadVars *tv, Flow *f, enum ExceptionPolicy policy)
 {
-    if (f->alproto == ALPROTO_SMTP) {
+    if (f->alproto == ALPROTO_POP3) {
     printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
           (uint8_t)f->src.addr_data8[0],
           (uint8_t)f->src.addr_data8[1],
