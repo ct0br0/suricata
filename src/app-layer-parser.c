@@ -1650,7 +1650,7 @@ int AppLayerParserParse(ThreadVars *tv, AppLayerParserThreadCtx *alp_tctx, Flow 
         AppLayerResult res = p->Parser[direction](f, alstate, pstate, stream_slice,
                 alp_tctx->alproto_local_storage[alproto][f->protomap]);
         if (res.status < 0) {
-              if (f->alproto == ALPROTO_HTTP || f->alproto == ALPROTO_HTTP1 || f->alproto == ALPROTO_HTTP2) {
+              if (f->alproto == ALPROTO_QUIC) {
                   printf("omgerr %u.%u.%u.%u:%u -> %u.%u.%u.%u:%u\n",
                         (uint8_t)f->src.addr_data8[0],
                         (uint8_t)f->src.addr_data8[1],
